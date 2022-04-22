@@ -1,3 +1,5 @@
+The old contract's code: https://bscscan.com/address/0x40B165Fd5dDc75ad0bDDc9ADd0adAbff5431a975#code
+
 # Features List
 ## Features to keep:
 - [x] Ownership Module - transferable ownership, renouncable, owner only calls.
