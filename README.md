@@ -7,12 +7,12 @@ The old contract's code: https://bscscan.com/address/0x40B165Fd5dDc75ad0bDDc9ADd
 - [x] Receive ETH && ERC20 tokens
 
 ## New features + Changes:
-- [x] 18 decimals instead of 9.
-- [x] Total supply 100 millions instead of 100 trillions (remove 6 zeros from price).
+- [x] Total supply 100 millions instead of 100 trillions (remove 6 zeros from price -> allows readable price and conversion with other cryptos on exchange)
+- [x] 18 decimals instead of 9 (allows us to not decrease the granularity of our token while decreasing its supply)
 - [x] Transfer funds stuck in contract to owner address instead. (withdrawERC20, withdrawETH)
 - [x] MaxFeeVariable (we should cap the fee because dextools show an ugly warning telling users "Looks like the owner can set a high fee like 100%", and no need to be able to do that imo, so I set it to 15%)
 - [x] Function to claim $MEMES from old contract.
-- [x] Pausable transfers feature.
+- [x] Pausable transfers feature (This will ONLY be used during an emergency or future migration to protect holders. Giving a new layer of protection in some cases)
 
 ## Other improvements:
 - [x] Removed unused code (dev fee)
