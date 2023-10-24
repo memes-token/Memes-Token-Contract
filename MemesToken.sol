@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.21;
 
 import '@openzeppelin/contracts/utils/Context.sol';
 import '@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol';
@@ -29,15 +29,24 @@ contract MemesToken is Context, IERC20Metadata, Ownable, ReentrancyGuard {
     uint256 private _rTotal = (MAX - (MAX % _totalSupply)); // Aka: reflected total (_rTotal is always a multiple of _totalSupply)
     uint256 private _tFeeTotal;
 
-    uint256 private constant MAX_TAX_FEE_VALUE = 15; // Cap them fees
-    uint256 public _taxFee = 9;
+    uint256 private constant MAX_TAX_FEE_VALUE = 9;
+    uint256 public _taxFee = 6;
     uint256 private _previousTaxFee = _taxFee;
 
     bytes32 public _migrationMerkleRoot = 0;
     bool public _isMigrationTokenWithdrawalActive = false;
     mapping(address => bool) public _tokenMigrationClaimed;
 
-    bool public _transfersPaused = false; // This will ONLY be used during an emergency or future migration. Giving a new layer of protection in some cases.
+    bool public _transfersPaused = false;
+
+    modifier notPaused() {
+        require(_transfersPaused == false, "All transfers are currently paused due to an emergency");
+        _;
+    }
+
+    event TaxFeeChanged(uint256 oldValue, uint256 newValue);
+    event TransfersPaused();
+    event TransfersResumed();
 
     constructor() Ownable() {
         _rOwned[_msgSender()] = _rTotal;
@@ -106,8 +115,7 @@ contract MemesToken is Context, IERC20Metadata, Ownable, ReentrancyGuard {
      * @param amount Amount of tokens that the `recipient` will receive
      * @return true if operation succeeded, false otherwise
      */
-    function transfer(address recipient, uint256 amount) public override returns (bool) {
-        require(_transfersPaused == false, "All transfers are currently paused due to an emergency");
+    function transfer(address recipient, uint256 amount) public override notPaused() returns (bool) {
         _transfer(_msgSender(), recipient, amount);
         return true;
     }
@@ -143,8 +151,7 @@ contract MemesToken is Context, IERC20Metadata, Ownable, ReentrancyGuard {
      * @param amount Amount of tokens to send from `sender` to `recipient`
      * @return true if operation succeeded, false otherwise
      */
-    function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool) {
-        require(_transfersPaused == false, "All transfers are currently paused due to an emergency");
+    function transferFrom(address sender, address recipient, uint256 amount) public override notPaused() returns (bool) {
         uint256 currentAllowance = _allowances[sender][_msgSender()];
         if (currentAllowance != type(uint256).max) {
             require(currentAllowance >= amount, "ERC20: transfer amount exceeds allowance");
@@ -299,6 +306,7 @@ contract MemesToken is Context, IERC20Metadata, Ownable, ReentrancyGuard {
      */
     function setTaxFeePercent(uint256 taxFee) external onlyOwner() {
         require(taxFee <= MAX_TAX_FEE_VALUE, "Tax fee must be less or equal to max tax fee value");
+        emit TaxFeeChanged(_taxFee, taxFee);
         _taxFee = taxFee;
     }
 
@@ -479,8 +487,7 @@ contract MemesToken is Context, IERC20Metadata, Ownable, ReentrancyGuard {
      * @param merkleProof Proof containing sibling hashes on the branch from the leaf to the root of the tree
      * @param fundsToWithdraw Amount of tokens to withdraw
      */
-    function withdrawMyMigrationTokens(bytes32[] calldata merkleProof, uint128 fundsToWithdraw) external nonReentrant() {
-        require(_transfersPaused == false, "All transfers are currently paused due to an emergency");
+    function withdrawMyMigrationTokens(bytes32[] calldata merkleProof, uint128 fundsToWithdraw) external nonReentrant() notPaused() {
         require(_isMigrationTokenWithdrawalActive == true, "Migration token withdrawal is disabled");
         require(!_tokenMigrationClaimed[_msgSender()], "This wallet already claimed it's tokens");
         require(fundsToWithdraw > 0, "Funds to withdraw must be greater than zero");
@@ -501,9 +508,9 @@ contract MemesToken is Context, IERC20Metadata, Ownable, ReentrancyGuard {
      * @notice Pauses all transfers. This will ONLY be used during an emergency or future migration. Giving a new layer of protection in some cases.
      * @dev Pauses transfers
      */
-    function pauseTransfers() external onlyOwner() {
-        require(_transfersPaused != true, "Transfers are already paused");
+    function pauseTransfers() external onlyOwner() notPaused() {
         _transfersPaused = true;
+        emit TransfersPaused();
     }
 
     /**
@@ -513,6 +520,7 @@ contract MemesToken is Context, IERC20Metadata, Ownable, ReentrancyGuard {
     function unpauseTransfers() external onlyOwner() {
         require(_transfersPaused != false, "Transfers are already unpaused");
         _transfersPaused = false;
+        emit TransfersResumed();
     }
 
     receive() external payable {}
