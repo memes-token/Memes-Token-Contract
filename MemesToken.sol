@@ -5,7 +5,7 @@ import '@openzeppelin/contracts/utils/Context.sol';
 import '@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/utils/cryptography/MerkleProof.sol';
-import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
+import '@openzeppelin/contracts/utils/ReentrancyGuard.sol';
 
 /**
  * @title Memes Token's token contract
@@ -48,7 +48,7 @@ contract MemesToken is Context, IERC20Metadata, Ownable, ReentrancyGuard {
     event TransfersPaused();
     event TransfersResumed();
 
-    constructor() Ownable() {
+    constructor() Ownable(_msgSender()) {
         _rOwned[_msgSender()] = _rTotal;
 
         // Exclude owner and this contract from fee

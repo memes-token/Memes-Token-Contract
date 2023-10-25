@@ -35,3 +35,4 @@ V1 contract's code: https://bscscan.com/address/0x40B165Fd5dDc75ad0bDDc9ADd0adAb
   * TransfersPaused
   * TransfersResumed
 - [x] Add modifier `notPaused()`
+- [x] Updated openzeppelin contracts to v5
