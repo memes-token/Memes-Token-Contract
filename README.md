@@ -1,4 +1,14 @@
-V1 contract's code: https://bscscan.com/address/0x40B165Fd5dDc75ad0bDDc9ADd0adAbff5431a975#code
+# Changes from V2 -> V3
+- [x] Solidity from 0.8.16 -> 0.8.21
+- [x] Starting fee from 9% -> 6%
+- [x] Max fee from 15% -> 9%
+- [x] Add new events for extra transparency:
+  * TaxFeeChanged
+  * TransfersPaused
+  * TransfersResumed
+- [x] Add modifier `notPaused()`
+- [x] Updated openzeppelin contracts to v5
+
 
 # Changes from V1 -> V2
 ## Features List
@@ -26,13 +36,5 @@ V1 contract's code: https://bscscan.com/address/0x40B165Fd5dDc75ad0bDDc9ADd0adAb
 - [x] Updated to latest version of Solidity (0.8.13)
 - [x] Added documentation
 
-# Changes from V2 -> V3
-- [x] Solidity from 0.8.16 -> 0.8.21
-- [x] Starting fee from 9% -> 6%
-- [x] Max fee from 15% -> 9%
-- [x] Add new events for extra transparency:
-  * TaxFeeChanged
-  * TransfersPaused
-  * TransfersResumed
-- [x] Add modifier `notPaused()`
-- [x] Updated openzeppelin contracts to v5
+
+V1 contract's code: https://bscscan.com/address/0x40B165Fd5dDc75ad0bDDc9ADd0adAbff5431a975#code
