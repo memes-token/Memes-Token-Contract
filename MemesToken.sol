@@ -491,7 +491,7 @@ contract MemesToken is Context, IERC20Metadata, Ownable, ReentrancyGuard {
         require(_isMigrationTokenWithdrawalActive == true, "Migration token withdrawal is disabled");
         require(!_tokenMigrationClaimed[_msgSender()], "This wallet already claimed it's tokens");
         require(fundsToWithdraw > 0, "Funds to withdraw must be greater than zero");
-        require(fundsToWithdraw <= 2300000000000000000000000, "Funds to withdraw must be less than the given amount");
+        require(fundsToWithdraw <= 3000000000000000000000000, "Funds to withdraw must be less than the given amount");
 
         bytes32 leaf = keccak256(abi.encodePacked(_msgSender(), fundsToWithdraw));
 
