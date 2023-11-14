@@ -1,4 +1,11 @@
 // SPDX-License-Identifier: MIT
+/** 
+Telegram: https://t.me/MemesTokenOfficial
+Twitter: https://twitter.com/MemestokenO
+Discord: https://discord.gg/c6xkZSKGXT
+Website: https://memestoken.com/
+**/
+
 pragma solidity ^0.8.21;
 
 import '@openzeppelin/contracts/utils/Context.sol';
