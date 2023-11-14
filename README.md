@@ -8,6 +8,7 @@
   * TransfersResumed
 - [x] Add modifier `notPaused()`
 - [x] Updated openzeppelin contracts to v5
+- [x] Added socials to the top of the contract
 
 
 # Changes from V1 -> V2
